@@ -25,7 +25,7 @@
           colors: {
             navy: { DEFAULT: '#0B1F3A', light: '#132D52', dark: '#061428' },
             accent: { DEFAULT: '#00E5A0', dark: '#00C288', glow: '#2DFFC4' },
-            surface: { light: '#F4F7FB', dark: '#0E1628' },
+            surface: { light: '#F0EBF7', muted: '#E6DEF2', dark: '#120F1A' },
           },
           boxShadow: {
             glow: '0 0 40px rgba(0, 229, 160, 0.25)',
@@ -53,8 +53,8 @@
 
     .hero-grid {
       background-image:
-        linear-gradient(rgba(0, 229, 160, 0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 229, 160, 0.06) 1px, transparent 1px);
+        linear-gradient(rgba(167, 139, 250, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(167, 139, 250, 0.08) 1px, transparent 1px);
       background-size: 48px 48px;
     }
 
@@ -164,8 +164,9 @@
     <section id="anasayfa" class="relative min-h-screen flex items-center pt-20 overflow-hidden">
       <!-- Arka plan dekorasyonları -->
       <div class="absolute inset-0 hero-grid opacity-60 dark:opacity-30 pointer-events-none"></div>
-      <div class="absolute top-1/4 -right-32 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute bottom-1/4 -left-32 w-80 h-80 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute top-1/4 -right-32 w-96 h-96 bg-violet-300/25 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute bottom-1/4 -left-32 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute top-1/2 left-1/4 w-64 h-64 bg-purple-200/30 rounded-full blur-3xl pointer-events-none"></div>
 
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
         <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -281,7 +282,7 @@
     </section>
 
     <!-- ==================== EĞİTİMLER ==================== -->
-    <section id="egitimler" class="py-20 lg:py-28 bg-white dark:bg-navy/30">
+    <section id="egitimler" class="py-20 lg:py-28 bg-surface-muted dark:bg-navy/30">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-14">
           <span class="text-accent font-semibold text-sm uppercase tracking-widest">Eğitimlerimiz</span>
@@ -639,9 +640,9 @@
       /* ---------- Header scroll efekti ---------- */
       function updateHeader() {
         if (window.scrollY > 20) {
-          header.classList.add('glass', 'bg-white/90', 'dark:bg-navy/90', 'shadow-md', 'border-b', 'border-slate-200/50', 'dark:border-white/5');
+          header.classList.add('glass', 'bg-surface-light/90', 'dark:bg-navy/90', 'shadow-md', 'border-b', 'border-violet-200/50', 'dark:border-white/5');
         } else {
-          header.classList.remove('glass', 'bg-white/90', 'dark:bg-navy/90', 'shadow-md', 'border-b', 'border-slate-200/50', 'dark:border-white/5');
+          header.classList.remove('glass', 'bg-surface-light/90', 'dark:bg-navy/90', 'shadow-md', 'border-b', 'border-violet-200/50', 'dark:border-white/5');
         }
       }
       window.addEventListener('scroll', updateHeader, { passive: true });
