@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Siwiworld Akademi — Geleceğin yetenekleri için uygulamalı, proje odaklı teknoloji ve dijital eğitimler." />
+  <title>Siwiworld Akademi | Geleceğin Yetenekleri Burada Yetişiyor</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            navy: {
+              900: '#0a1628',
+              800: '#0f2140',
+              700: '#152d52',
+              600: '#1a3a66',
+            },
+            accent: {
+              DEFAULT: '#00e5a0',
+              hover: '#00c98d',
+              muted: '#00e5a020',
+            },
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-12px)' },
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+
+  <style>
+    /* Özel scrollbar ve seçim rengi */
+    ::selection { background: #00e5a040; color: #0a1628; }
+    .dark ::selection { color: #f8fafc; }
+
+    /* Hero grid arka plan deseni */
+    .hero-grid {
+      background-image:
+        linear-gradient(rgba(0, 229, 160, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 160, 0.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    /* Toast animasyonu */
+    #toast.show { transform: translateX(0); opacity: 1; }
+    #toast.hide { transform: translateX(120%); opacity: 0; }
+
+    /* Mobil menü geçişi */
+    #mobile-menu.open { max-height: 24rem; opacity: 1; }
+    #mobile-menu.closed { max-height: 0; opacity: 0; }
+
+    /* Video modal */
+    #video-modal.open { display: flex; }
+  </style>
+</head>
+
+<body class="font-sans bg-slate-50 text-navy-900 antialiased dark:bg-navy-900 dark:text-slate-100 transition-colors duration-300">
+
+  <!-- ========== HEADER / NAVİGASYON ========== -->
+  <header id="header" class="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-navy-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-navy-700/80 shadow-sm transition-colors">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Ana navigasyon">
+      <div class="flex items-center justify-between h-16 lg:h-20">
+
+        <!-- Logo -->
+        <a href="#anasayfa" class="flex items-center gap-2.5 group shrink-0" aria-label="Siwiworld Akademi Anasayfa">
+          <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-navy-800 to-navy-900 dark:from-accent dark:to-accent-hover text-accent dark:text-navy-900 font-bold text-lg shadow-lg group-hover:scale-105 transition-transform">
+            SW
+          </span>
+          <span class="flex flex-col leading-tight">
+            <span class="font-bold text-navy-900 dark:text-white text-sm sm:text-base tracking-tight">Siwiworld</span>
+            <span class="text-xs text-accent font-semibold tracking-widest uppercase">Akademi</span>
+          </span>
+        </a>
+
+        <!-- Desktop menü -->
+        <ul class="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <li><a href="#anasayfa" class="nav-link hover:text-accent dark:hover:text-accent transition-colors">Anasayfa</a></li>
+          <li><a href="#hakkimizda" class="nav-link hover:text-accent dark:hover:text-accent transition-colors">Hakkımızda</a></li>
+          <li><a href="#egitimler" class="nav-link hover:text-accent dark:hover:text-accent transition-colors">Eğitimlerimiz</a></li>
+          <li><a href="#neden-biz" class="nav-link hover:text-accent dark:hover:text-accent transition-colors">Neden Biz?</a></li>
+          <li><a href="#iletisim" class="nav-link hover:text-accent dark:hover:text-accent transition-colors">İletişim</a></li>
+        </ul>
+
+        <!-- Sağ: tema + CTA + hamburger -->
+        <div class="flex items-center gap-3">
+          <button type="button" id="theme-toggle" class="p-2.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-navy-800 dark:text-slate-400 transition-colors" aria-label="Karanlık/Aydınlık mod">
+            <i class="fa-solid fa-moon dark:hidden text-lg"></i>
+            <i class="fa-solid fa-sun hidden dark:inline text-lg text-accent"></i>
+          </button>
+
+          <a href="#on-kayit" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent hover:bg-accent-hover text-navy-900 font-semibold text-sm shadow-lg shadow-accent/25 transition-all hover:scale-[1.02] active:scale-[0.98]">
+            Hemen Başvur
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </a>
+
+          <button type="button" id="menu-toggle" class="lg:hidden p-2.5 rounded-lg text-navy-900 dark:text-white hover:bg-slate-100 dark:hover:bg-navy-800" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menüyü aç">
+            <i class="fa-solid fa-bars text-xl" id="menu-icon-open"></i>
+            <i class="fa-solid fa-xmark text-xl hidden" id="menu-icon-close"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobil menü -->
+      <div id="mobile-menu" class="lg:hidden closed overflow-hidden transition-all duration-300 ease-in-out" aria-hidden="true">
+        <ul class="flex flex-col gap-1 pb-4 pt-2 border-t border-slate-200 dark:border-navy-700">
+          <li><a href="#anasayfa" class="mobile-nav block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-navy-800 font-medium">Anasayfa</a></li>
+          <li><a href="#hakkimizda" class="mobile-nav block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-navy-800 font-medium">Hakkımızda</a></li>
+          <li><a href="#egitimler" class="mobile-nav block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-navy-800 font-medium">Eğitimlerimiz</a></li>
+          <li><a href="#neden-biz" class="mobile-nav block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-navy-800 font-medium">Neden Biz?</a></li>
+          <li><a href="#iletisim" class="mobile-nav block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-navy-800 font-medium">İletişim</a></li>
+          <li class="pt-2">
+            <a href="#on-kayit" class="mobile-nav flex justify-center items-center gap-2 px-5 py-3 rounded-full bg-accent text-navy-900 font-semibold">Hemen Başvur</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ========== HERO ========== -->
+    <section id="anasayfa" class="relative min-h-screen flex items-center pt-20 lg:pt-24 overflow-hidden hero-grid">
+      <!-- Dekoratif gradient blob'lar -->
+      <div class="absolute top-20 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute bottom-0 left-0 w-80 h-80 bg-navy-600/20 dark:bg-accent/5 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <!-- Sol: metin -->
+          <div class="relative z-10">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-muted border border-accent/30 text-accent text-xs font-semibold uppercase tracking-wider mb-6">
+              <span class="w-2 h-2 rounded-full bg-accent animate-pulse-slow"></span>
+              Yeni dönem kayıtları açıldı
+            </span>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.25rem] font-extrabold leading-tight text-navy-900 dark:text-white mb-6">
+              Geleceğin Yetenekleri
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-teal-400"> Siwiworld Akademi</span>'de Yetişiyor.
+            </h1>
+            <p class="text-lg text-slate-600 dark:text-slate-400 max-w-xl mb-8 leading-relaxed">
+              Sektör lideri eğitmenlerle, uygulamalı ve proje odaklı eğitimlerle kariyerine yön ver.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <a href="#egitimler" class="inline-flex justify-center items-center gap-2 px-8 py-4 rounded-full bg-accent hover:bg-accent-hover text-navy-900 font-bold shadow-xl shadow-accent/30 transition-all hover:scale-[1.02]">
+                <i class="fa-solid fa-graduation-cap"></i>
+                Eğitimleri İncele
+              </a>
+              <button type="button" id="video-btn" class="inline-flex justify-center items-center gap-2 px-8 py-4 rounded-full border-2 border-navy-800/30 dark:border-slate-500 text-navy-900 dark:text-white font-semibold hover:border-accent hover:text-accent dark:hover:border-accent transition-all">
+                <i class="fa-solid fa-circle-play"></i>
+                Tanıtım Videosu İzle
+              </button>
+            </div>
+          </div>
+
+          <!-- Sağ: soyut görsel alan -->
+          <div class="relative hidden sm:block" aria-hidden="true">
+            <div class="relative aspect-square max-w-lg mx-auto">
+              <div class="absolute inset-4 rounded-3xl bg-gradient-to-br from-navy-800 to-navy-900 dark:from-navy-700 dark:to-navy-900 shadow-2xl animate-float overflow-hidden">
+                <div class="absolute inset-0 opacity-40" style="background: radial-gradient(circle at 30% 20%, #00e5a0 0%, transparent 50%);"></div>
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
+                  <i class="fa-solid fa-laptop-code text-6xl text-accent mb-4"></i>
+                  <p class="text-white/90 font-semibold text-lg">Kod · Veri · Tasarım</p>
+                  <p class="text-accent/80 text-sm mt-2">360° Kariyer Hazırlığı</p>
+                </div>
+              </div>
+              <!-- Yüzen kartlar -->
+              <div class="absolute -top-2 -left-4 bg-white dark:bg-navy-800 rounded-2xl p-4 shadow-xl border border-slate-100 dark:border-navy-600 animate-float" style="animation-delay: -2s;">
+                <i class="fa-solid fa-chart-line text-accent text-2xl"></i>
+                <p class="text-xs font-bold mt-1 text-navy-900 dark:text-white">%95 İşe Yerleşme</p>
+              </div>
+              <div class="absolute -bottom-2 -right-4 bg-white dark:bg-navy-800 rounded-2xl p-4 shadow-xl border border-slate-100 dark:border-navy-600 animate-float" style="animation-delay: -4s;">
+                <i class="fa-solid fa-users text-accent text-2xl"></i>
+                <p class="text-xs font-bold mt-1 text-navy-900 dark:text-white">500+ Mezun</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== İSTATİSTİKLER ========== -->
+    <section class="bg-navy-900 dark:bg-navy-800 py-12 lg:py-16" aria-label="İstatistikler">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ul class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
+          <li class="group">
+            <p class="text-4xl lg:text-5xl font-extrabold text-accent mb-2" data-count="10">10+</p>
+            <p class="text-slate-300 font-medium">Aktif Eğitim</p>
+          </li>
+          <li class="group border-y sm:border-y-0 sm:border-x border-navy-700 py-8 sm:py-0">
+            <p class="text-4xl lg:text-5xl font-extrabold text-accent mb-2">500+</p>
+            <p class="text-slate-300 font-medium">Mezun Öğrenci</p>
+          </li>
+          <li class="group">
+            <p class="text-4xl lg:text-5xl font-extrabold text-accent mb-2">%95</p>
+            <p class="text-slate-300 font-medium">İşe Yerleşme Oranı</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== HAKKIMIZDA ========== -->
+    <section id="hakkimizda" class="py-20 lg:py-28 bg-white dark:bg-navy-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center mb-4">
+          <span class="text-accent font-semibold text-sm uppercase tracking-widest">Hakkımızda</span>
+          <h2 class="text-3xl lg:text-4xl font-bold text-navy-900 dark:text-white mt-3 mb-6">Teknoloji ve İnovasyonun Kalbi</h2>
+          <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+            Siwiworld Akademi, dijital çağın gerektirdiği yetkinlikleri kazandırmak için kurulmuş, sektör odaklı bir eğitim platformudur.
+            Teoriyi pratiğe dönüştürüyor, her öğrenciye mentorluk ve portfolyo desteği sunuyoruz.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== EĞİTİMLER ========== -->
+    <section id="egitimler" class="py-20 lg:py-28 bg-slate-50 dark:bg-navy-800/50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-14">
+          <span class="text-accent font-semibold text-sm uppercase tracking-widest">Programlar</span>
+          <h2 class="text-3xl lg:text-4xl font-bold text-navy-900 dark:text-white mt-3">Eğitimlerimiz</h2>
+          <p class="text-slate-600 dark:text-slate-400 mt-4 max-w-2xl mx-auto">Kariyer hedeflerine uygun, güncel müfredatlı bootcamp ve sertifika programları.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Kart 1 -->
+          <article class="course-card group flex flex-col bg-white dark:bg-navy-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl border border-slate-200/80 dark:border-navy-700 transition-all hover:-translate-y-1">
+            <div class="h-44 bg-gradient-to-br from-navy-800 to-navy-900 flex items-center justify-center relative overflow-hidden">
+              <div class="absolute inset-0 bg-accent/10"></div>
+              <i class="fa-solid fa-code text-5xl text-accent relative z-10 group-hover:scale-110 transition-transform"></i>
+            </div>
+            <div class="p-6 flex flex-col flex-1">
+              <h3 class="text-xl font-bold text-navy-900 dark:text-white mb-2">Full-Stack Web Geliştirme</h3>
+              <p class="text-slate-600 dark:text-slate-400 text-sm flex-1 mb-4 leading-relaxed">
+                HTML, CSS, JavaScript, React ve Node.js ile uçtan uca modern web uygulamaları geliştirmeyi öğrenin.
+              </p>
+              <p class="text-xs font-semibold text-accent mb-4 flex items-center gap-2">
+                <i class="fa-regular fa-clock"></i> Süre: 12 Hafta
+              </p>
+              <button type="button" class="course-detail-btn w-full py-3 rounded-xl border-2 border-navy-800/20 dark:border-slate-600 font-semibold text-sm hover:border-accent hover:text-accent transition-colors" data-course="Full-Stack Web Geliştirme">
+                Detayları Gör
+              </button>
+            </div>
+          </article>
+
+          <!-- Kart 2 -->
+          <article class="course-card group flex flex-col bg-white dark:bg-navy-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl border border-slate-200/80 dark:border-navy-700 transition-all hover:-translate-y-1">
+            <div class="h-44 bg-gradient-to-br from-teal-800 to-navy-900 flex items-center justify-center relative overflow-hidden">
+              <div class="absolute inset-0 bg-accent/10"></div>
+              <i class="fa-solid fa-brain text-5xl text-accent relative z-10 group-hover:scale-110 transition-transform"></i>
+            </div>
+            <div class="p-6 flex flex-col flex-1">
+              <h3 class="text-xl font-bold text-navy-900 dark:text-white mb-2">Veri Bilimi ve Yapay Zeka</h3>
+              <p class="text-slate-600 dark:text-slate-400 text-sm flex-1 mb-4 leading-relaxed">
+                Python, makine öğrenmesi ve derin öğrenme ile veriden değer üreten yapay zeka çözümleri tasarlayın.
+              </p>
+              <p class="text-xs font-semibold text-accent mb-4 flex items-center gap-2">
+                <i class="fa-regular fa-clock"></i> Süre: 12 Hafta
+              </p>
+              <button type="button" class="course-detail-btn w-full py-3 rounded-xl border-2 border-navy-800/20 dark:border-slate-600 font-semibold text-sm hover:border-accent hover:text-accent transition-colors" data-course="Veri Bilimi ve Yapay Zeka">
+                Detayları Gör
+              </button>
+            </div>
+          </article>
+
+          <!-- Kart 3 -->
+          <article class="course-card group flex flex-col bg-white dark:bg-navy-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl border border-slate-200/80 dark:border-navy-700 transition-all hover:-translate-y-1">
+            <div class="h-44 bg-gradient-to-br from-indigo-900 to-navy-900 flex items-center justify-center relative overflow-hidden">
+              <div class="absolute inset-0 bg-accent/10"></div>
+              <i class="fa-solid fa-bullhorn text-5xl text-accent relative z-10 group-hover:scale-110 transition-transform"></i>
+            </div>
+            <div class="p-6 flex flex-col flex-1">
+              <h3 class="text-xl font-bold text-navy-900 dark:text-white mb-2">Dijital Pazarlama ve Sosyal Medya</h3>
+              <p class="text-slate-600 dark:text-slate-400 text-sm flex-1 mb-4 leading-relaxed">
+                SEO, reklam yönetimi ve içerik stratejileriyle markaları dijital dünyada büyütün.
+              </p>
+              <p class="text-xs font-semibold text-accent mb-4 flex items-center gap-2">
+                <i class="fa-regular fa-clock"></i> Süre: 12 Hafta
+              </p>
+              <button type="button" class="course-detail-btn w-full py-3 rounded-xl border-2 border-navy-800/20 dark:border-slate-600 font-semibold text-sm hover:border-accent hover:text-accent transition-colors" data-course="Dijital Pazarlama ve Sosyal Medya">
+                Detayları Gör
+              </button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== NEDEN BİZ ========== -->
+    <section id="neden-biz" class="py-20 lg:py-28 bg-white dark:bg-navy-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-14">
+          <span class="text-accent font-semibold text-sm uppercase tracking-widest">Avantajlar</span>
+          <h2 class="text-3xl lg:text-4xl font-bold text-navy-900 dark:text-white mt-3">Neden Siwiworld?</h2>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="text-center p-6 rounded-2xl hover:bg-slate-50 dark:hover:bg-navy-800/50 transition-colors">
+            <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-accent-muted flex items-center justify-center">
+              <i class="fa-solid fa-video text-2xl text-accent"></i>
+            </div>
+            <h3 class="font-bold text-lg mb-2 text-navy-900 dark:text-white">Canlı ve İnteraktif Dersler</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Gerçek zamanlı etkileşim, soru-cevap ve uygulamalı atölyeler.</p>
+          </div>
+          <div class="text-center p-6 rounded-2xl hover:bg-slate-50 dark:hover:bg-navy-800/50 transition-colors">
+            <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-accent-muted flex items-center justify-center">
+              <i class="fa-solid fa-user-tie text-2xl text-accent"></i>
+            </div>
+            <h3 class="font-bold text-lg mb-2 text-navy-900 dark:text-white">Mentor Desteği</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Bire bir mentorluk ve profesyonel portfolyo yapımı.</p>
+          </div>
+          <div class="text-center p-6 rounded-2xl hover:bg-slate-50 dark:hover:bg-navy-800/50 transition-colors">
+            <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-accent-muted flex items-center justify-center">
+              <i class="fa-solid fa-briefcase text-2xl text-accent"></i>
+            </div>
+            <h3 class="font-bold text-lg mb-2 text-navy-900 dark:text-white">İş ve Staj İmkanları</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Partner firmalarla staj ve işe alım fırsatları.</p>
+          </div>
+          <div class="text-center p-6 rounded-2xl hover:bg-slate-50 dark:hover:bg-navy-800/50 transition-colors">
+            <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-accent-muted flex items-center justify-center">
+              <i class="fa-solid fa-book-open text-2xl text-accent"></i>
+            </div>
+            <h3 class="font-bold text-lg mb-2 text-navy-900 dark:text-white">Güncel Müfredat</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Sektörün ihtiyaçlarına göre sürekli güncellenen içerik.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== ÖN KAYIT / İLETİŞİM ========== -->
+    <section id="on-kayit" class="py-20 lg:py-28 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900" aria-hidden="true"></div>
+      <div class="absolute inset-0 hero-grid opacity-30" aria-hidden="true"></div>
+      <div class="absolute top-0 right-0 w-72 h-72 bg-accent/20 rounded-full blur-3xl" aria-hidden="true"></div>
+
+      <div id="iletisim" class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-10">
+          <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">Geleceğini Erteleme, Hemen İlk Adımı At!</h2>
+          <p class="text-slate-300">Ön kayıt formunu doldurun; danışmanlarımız en kısa sürede sizinle iletişime geçsin.</p>
+        </div>
+
+        <form id="pre-register-form" class="bg-white/10 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/10 shadow-2xl" novalidate>
+          <div class="grid sm:grid-cols-2 gap-5">
+            <!-- Ad Soyad -->
+            <div class="sm:col-span-2">
+              <label for="fullname" class="block text-sm font-medium text-slate-200 mb-1.5">Ad Soyad <span class="text-accent">*</span></label>
+              <input type="text" id="fullname" name="fullname" required minlength="3" autocomplete="name"
+                class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition"
+                placeholder="Adınız ve soyadınız" />
+              <p class="error-msg hidden text-red-400 text-xs mt-1" data-for="fullname"></p>
+            </div>
+
+            <!-- E-posta -->
+            <div>
+              <label for="email" class="block text-sm font-medium text-slate-200 mb-1.5">E-posta <span class="text-accent">*</span></label>
+              <input type="email" id="email" name="email" required autocomplete="email"
+                class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition"
+                placeholder="ornek@email.com" />
+              <p class="error-msg hidden text-red-400 text-xs mt-1" data-for="email"></p>
+            </div>
+
+            <!-- Telefon -->
+            <div>
+              <label for="phone" class="block text-sm font-medium text-slate-200 mb-1.5">Telefon <span class="text-accent">*</span></label>
+              <input type="tel" id="phone" name="phone" required pattern="^[0-9\s\+\-\(\)]{10,}$" autocomplete="tel"
+                class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition"
+                placeholder="05XX XXX XX XX" />
+              <p class="error-msg hidden text-red-400 text-xs mt-1" data-for="phone"></p>
+            </div>
+
+            <!-- Eğitim seçimi -->
+            <div class="sm:col-span-2">
+              <label for="course" class="block text-sm font-medium text-slate-200 mb-1.5">İlgilendiğiniz Eğitim <span class="text-accent">*</span></label>
+              <select id="course" name="course" required
+                class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition appearance-none cursor-pointer">
+                <option value="" disabled selected class="text-slate-500 bg-navy-900">Bir program seçin</option>
+                <option value="fullstack" class="bg-navy-900">Full-Stack Web Geliştirme</option>
+                <option value="datascience" class="bg-navy-900">Veri Bilimi ve Yapay Zeka</option>
+                <option value="marketing" class="bg-navy-900">Dijital Pazarlama ve Sosyal Medya</option>
+                <option value="other" class="bg-navy-900">Henüz karar vermedim</option>
+              </select>
+              <p class="error-msg hidden text-red-400 text-xs mt-1" data-for="course"></p>
+            </div>
+          </div>
+
+          <button type="submit" class="mt-6 w-full py-4 rounded-xl bg-accent hover:bg-accent-hover text-navy-900 font-bold text-lg shadow-lg shadow-accent/30 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2">
+            <i class="fa-solid fa-paper-plane"></i>
+            Ön Kayıt Yap
+          </button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="bg-navy-900 dark:bg-black/40 border-t border-navy-700 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+        <div class="flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-navy-900 font-bold">SW</span>
+          <div>
+            <p class="font-bold text-white">Siwiworld Akademi</p>
+            <p class="text-xs text-slate-400">Geleceği birlikte inşa ediyoruz.</p>
+          </div>
+        </div>
+
+        <ul class="flex flex-wrap justify-center gap-6 text-sm text-slate-400">
+          <li><a href="#anasayfa" class="hover:text-accent transition-colors">Anasayfa</a></li>
+          <li><a href="#egitimler" class="hover:text-accent transition-colors">Eğitimler</a></li>
+          <li><a href="#neden-biz" class="hover:text-accent transition-colors">Neden Biz</a></li>
+          <li><a href="#on-kayit" class="hover:text-accent transition-colors">Ön Kayıt</a></li>
+        </ul>
+
+        <div class="flex gap-4">
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-navy-800 flex items-center justify-center text-slate-400 hover:bg-accent hover:text-navy-900 transition-all" aria-label="LinkedIn">
+            <i class="fa-brands fa-linkedin-in"></i>
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-navy-800 flex items-center justify-center text-slate-400 hover:bg-accent hover:text-navy-900 transition-all" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-navy-800 flex items-center justify-center text-slate-400 hover:bg-accent hover:text-navy-900 transition-all" aria-label="YouTube">
+            <i class="fa-brands fa-youtube"></i>
+          </a>
+        </div>
+      </div>
+
+      <p class="text-center text-slate-500 text-sm mt-10 pt-8 border-t border-navy-800">
+        &copy; <span id="year"></span> Siwiworld Akademi. Tüm hakları saklıdır.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Toast bildirimi -->
+  <div id="toast" class="fixed bottom-6 right-6 z-[100] flex items-center gap-3 px-5 py-4 rounded-xl bg-navy-900 border border-accent/40 text-white shadow-2xl translate-x-[120%] opacity-0 transition-all duration-500 max-w-sm" role="alert" aria-live="polite">
+    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-navy-900">
+      <i class="fa-solid fa-check"></i>
+    </span>
+    <div>
+      <p class="font-bold text-accent" id="toast-title">Başarılı!</p>
+      <p class="text-sm text-slate-300" id="toast-message">Ön kaydınız alındı.</p>
+    </div>
+    <button type="button" id="toast-close" class="ml-2 text-slate-400 hover:text-white" aria-label="Kapat">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <!-- Video modal -->
+  <div id="video-modal" class="fixed inset-0 z-[90] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4" role="dialog" aria-modal="true" aria-labelledby="video-modal-title">
+    <div class="relative w-full max-w-3xl aspect-video bg-navy-900 rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center">
+      <button type="button" id="video-modal-close" class="absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-white/10 text-white hover:bg-accent hover:text-navy-900 transition-colors" aria-label="Videoyu kapat">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+      <div class="text-center p-8">
+        <i class="fa-solid fa-play-circle text-6xl text-accent mb-4"></i>
+        <p id="video-modal-title" class="text-white font-semibold text-lg">Tanıtım Videosu</p>
+        <p class="text-slate-400 text-sm mt-2">Video URL'si eklendiğinde burada oynatılacaktır.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== JAVASCRIPT ========== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // --- Yardımcılar ---
+      const $ = (sel, ctx = document) => ctx.querySelector(sel);
+      const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+
+      // Telif yılı
+      const yearEl = $('#year');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+      // --- Dark mode ---
+      const themeToggle = $('#theme-toggle');
+      const html = document.documentElement;
+      const storedTheme = localStorage.getItem('siwi-theme');
+
+      if (storedTheme === 'dark') html.classList.add('dark');
+      else if (storedTheme === 'light') html.classList.remove('dark');
+      else if (window.matchMedia('(prefers-color-scheme: dark)').matches) html.classList.add('dark');
+
+      themeToggle?.addEventListener('click', () => {
+        html.classList.toggle('dark');
+        localStorage.setItem('siwi-theme', html.classList.contains('dark') ? 'dark' : 'light');
+      });
+
+      // --- Mobil menü ---
+      const menuToggle = $('#menu-toggle');
+      const mobileMenu = $('#mobile-menu');
+      const iconOpen = $('#menu-icon-open');
+      const iconClose = $('#menu-icon-close');
+
+      function setMenuOpen(open) {
+        if (!mobileMenu) return;
+        mobileMenu.classList.toggle('open', open);
+        mobileMenu.classList.toggle('closed', !open);
+        mobileMenu.setAttribute('aria-hidden', String(!open));
+        menuToggle?.setAttribute('aria-expanded', String(open));
+        iconOpen?.classList.toggle('hidden', open);
+        iconClose?.classList.toggle('hidden', !open);
+      }
+
+      menuToggle?.addEventListener('click', () => {
+        const isOpen = mobileMenu?.classList.contains('open');
+        setMenuOpen(!isOpen);
+      });
+
+      $$('.mobile-nav').forEach((link) => {
+        link.addEventListener('click', () => setMenuOpen(false));
+      });
+
+      // Header gölgesi scroll'da
+      const header = $('#header');
+      window.addEventListener('scroll', () => {
+        if (!header) return;
+        header.classList.toggle('shadow-md', window.scrollY > 20);
+      }, { passive: true });
+
+      // --- Aktif nav link (scroll spy basit) ---
+      const sections = $$('section[id]');
+      const navLinks = $$('.nav-link');
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const id = entry.target.id;
+            navLinks.forEach((link) => {
+              const href = link.getAttribute('href');
+              link.classList.toggle('text-accent', href === `#${id}`);
+              link.classList.toggle('font-semibold', href === `#${id}`);
+            });
+          });
+        },
+        { rootMargin: '-40% 0px -50% 0px', threshold: 0 }
+      );
+      sections.forEach((s) => observer.observe(s));
+
+      // --- Video modal ---
+      const videoBtn = $('#video-btn');
+      const videoModal = $('#video-modal');
+      const videoModalClose = $('#video-modal-close');
+
+      function openVideoModal() {
+        videoModal?.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeVideoModal() {
+        videoModal?.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      videoBtn?.addEventListener('click', openVideoModal);
+      videoModalClose?.addEventListener('click', closeVideoModal);
+      videoModal?.addEventListener('click', (e) => {
+        if (e.target === videoModal) closeVideoModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeVideoModal();
+      });
+
+      // --- Kurs detay toast ---
+      $$('.course-detail-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const name = btn.dataset.course || 'Eğitim';
+          showToast('Bilgi', `${name} için detay sayfası yakında eklenecek. Şimdilik ön kayıt formunu doldurabilirsiniz.`, 4000);
+        });
+      });
+
+      // --- Toast ---
+      const toast = $('#toast');
+      const toastTitle = $('#toast-title');
+      const toastMessage = $('#toast-message');
+      const toastClose = $('#toast-close');
+      let toastTimer;
+
+      function showToast(title, message, duration = 5000) {
+        if (!toast) return;
+        toastTitle.textContent = title;
+        toastMessage.textContent = message;
+        toast.classList.remove('hide');
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(hideToast, duration);
+      }
+
+      function hideToast() {
+        toast?.classList.remove('show');
+        toast?.classList.add('hide');
+      }
+
+      toastClose?.addEventListener('click', hideToast);
+
+      // --- Form validasyonu ---
+      const form = $('#pre-register-form');
+      const validators = {
+        fullname: (v) => {
+          if (!v.trim()) return 'Ad soyad zorunludur.';
+          if (v.trim().length < 3) return 'En az 3 karakter giriniz.';
+          return '';
+        },
+        email: (v) => {
+          if (!v.trim()) return 'E-posta zorunludur.';
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return 'Geçerli bir e-posta giriniz.';
+          return '';
+        },
+        phone: (v) => {
+          const digits = v.replace(/\D/g, '');
+          if (!v.trim()) return 'Telefon zorunludur.';
+          if (digits.length < 10) return 'Geçerli bir telefon numarası giriniz.';
+          return '';
+        },
+        course: (v) => {
+          if (!v) return 'Lütfen bir eğitim programı seçiniz.';
+          return '';
+        },
+      };
+
+      function showFieldError(fieldId, msg) {
+        const input = $(`#${fieldId}`);
+        const err = $(`.error-msg[data-for="${fieldId}"]`);
+        if (msg) {
+          input?.classList.add('border-red-400', 'ring-1', 'ring-red-400/50');
+          if (err) { err.textContent = msg; err.classList.remove('hidden'); }
+        } else {
+          input?.classList.remove('border-red-400', 'ring-1', 'ring-red-400/50');
+          if (err) { err.textContent = ''; err.classList.add('hidden'); }
+        }
+      }
+
+      function validateField(fieldId) {
+        const input = $(`#${fieldId}`);
+        if (!input || !validators[fieldId]) return true;
+        const msg = validators[fieldId](input.value);
+        showFieldError(fieldId, msg);
+        return !msg;
+      }
+
+      ['fullname', 'email', 'phone', 'course'].forEach((id) => {
+        const el = $(`#${id}`);
+        el?.addEventListener('blur', () => validateField(id));
+        el?.addEventListener('input', () => {
+          if ($(`#${id}`)?.classList.contains('border-red-400')) validateField(id);
+        });
+      });
+
+      form?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fields = ['fullname', 'email', 'phone', 'course'];
+        const allValid = fields.every(validateField);
+        if (!allValid) {
+          showToast('Eksik Bilgi', 'Lütfen formdaki hataları düzeltin.', 4000);
+          return;
+        }
+
+        // Başarılı gönderim simülasyonu
+        form.reset();
+        fields.forEach((id) => showFieldError(id, ''));
+        showToast('Başarılı!', 'Ön kaydınız alındı. En kısa sürede sizinle iletişime geçeceğiz.', 6000);
+      });
+    })();
+  </script>
+</body>
+</html>
